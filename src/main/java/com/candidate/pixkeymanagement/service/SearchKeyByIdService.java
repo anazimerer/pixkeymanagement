@@ -39,9 +39,11 @@ public class SearchKeyByIdService {
     }
 
     private PixKeyRegister findById(UUID id) {
+        log.debug("Searching for active register by id: {}", id);
         Optional<PixKeyRegister> pixKeyRegister = pixKeyRegisterRepository.findByIdAndKeyInactivationDateIsNull(id);
 
         if (pixKeyRegister.isEmpty()) {
+            log.debug("Not found register by id: {}", id);
             throw new NotFoundException(NOT_FOUND_KEY_PIX);
         }
 
@@ -50,6 +52,7 @@ public class SearchKeyByIdService {
 
     private PixKeyResponseDTO convertEntityToResponseDTO(PixKeyRegister pixKeyRegister) {
         try {
+            log.debug("Converting pixKeyRegister entity to responseDTO");
             return PixKeyResponseDTO.builder()
                     .id(pixKeyRegister.getId())
                     .keyType(PixKeyType.fromValue(pixKeyRegister.getKeyType()).orElseThrow())

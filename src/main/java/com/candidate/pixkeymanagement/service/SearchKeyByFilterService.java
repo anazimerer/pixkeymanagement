@@ -39,15 +39,17 @@ public class SearchKeyByFilterService {
 
     private List<PixKeyResponseDTO> convertEntityToResponseListDTO(List<PixKeyRegister> pixKeyRegisterList) {
         try {
+            log.debug("Converting entityList to responseDTOList");
             return pixKeyRegisterList.stream().map(this::convertEntityToResponseDTO).toList();
         } catch (Exception e) {
-            log.debug("Convert entity to responseDTO failed");
+            log.error("Convert entity to responseDTO failed");
             throw new UnexpectedTypeException(UNEXPECTED_ERROR);
         }
     }
 
     private PixKeyResponseDTO convertEntityToResponseDTO(PixKeyRegister pixKeyRegisterUpdated) {
         try {
+            log.debug("Converting pixKeyRegister entity to responseDTO");
             return PixKeyResponseDTO.builder()
                     .id(pixKeyRegisterUpdated.getId())
                     .keyType(PixKeyType.fromValue(pixKeyRegisterUpdated.getKeyType()).orElseThrow())
@@ -69,19 +71,24 @@ public class SearchKeyByFilterService {
     }
 
     public List<PixKeyRegister> findRegisterByFilters(String keyType, String agencyNumber, String accountNumber, String accountHolderFirstName) {
+        log.debug("Start findRegisterByFilters");
         return pixKeyRegisterRepository.findAll((root, query, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
 
             if (Objects.nonNull(keyType)) {
+                log.debug("Searching for key type {}", keyType);
                 predicates.add(criteriaBuilder.equal(root.get("keyType"), keyType));
             }
             if (Objects.nonNull(agencyNumber)) {
+                log.debug("Searching for agency number {}", agencyNumber);
                 predicates.add(criteriaBuilder.equal(root.get("agencyNumber"), agencyNumber));
             }
             if (Objects.nonNull(accountNumber)) {
+                log.debug("Searching for accountNumber {}", accountNumber);
                 predicates.add(criteriaBuilder.equal(root.get("accountNumber"), accountNumber));
             }
             if (Objects.nonNull(accountHolderFirstName)) {
+                log.debug("Searching for and accountHolderFirstName {}", accountHolderFirstName);
                 predicates.add(criteriaBuilder.equal(root.get("accountHolderFirstName"), accountHolderFirstName));
             }
 

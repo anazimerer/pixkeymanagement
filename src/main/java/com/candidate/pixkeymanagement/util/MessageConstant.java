@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 public abstract class MessageConstant {
 
     public static final String NOT_FOUND_KEY_PIX = "404.001";
+    public static final String NOT_FOUND_KEY_PIX_DELETE = "404.002";
 
     public static final String FIELD_REQUIRED = "400.001";
     public static final String FIELD_INVALID = "400.002";

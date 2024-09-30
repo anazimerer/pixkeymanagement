@@ -18,7 +18,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
-import static com.candidate.pixkeymanagement.util.MessageConstant.NOT_FOUND_KEY_PIX;
+import static com.candidate.pixkeymanagement.util.MessageConstant.NOT_FOUND_KEY_PIX_DELETE;
 import static com.candidate.pixkeymanagement.util.MessageConstant.UNEXPECTED_ERROR;
 
 @Slf4j
@@ -39,7 +39,7 @@ public class DeleteKeyService {
         Optional<PixKeyRegister> pixKeyRegister = pixKeyRegisterRepository.findByIdAndKeyInactivationDateIsNull(id);
 
         if (pixKeyRegister.isEmpty()) {
-            throw new NotFoundException(NOT_FOUND_KEY_PIX);
+            throw new NotFoundException(NOT_FOUND_KEY_PIX_DELETE);
         }
 
         return pixKeyRegister.get();
@@ -58,6 +58,7 @@ public class DeleteKeyService {
 
     private PixKeyResponseDTO convertEntityToResponse(PixKeyRegister pixKeyRegister) {
         try {
+            log.debug("Converting pixKeyRegister entity to responseDTO");
             return PixKeyResponseDTO.builder()
                     .message("Chave Pix deletada com sucesso")
                     .id(pixKeyRegister.getId())
