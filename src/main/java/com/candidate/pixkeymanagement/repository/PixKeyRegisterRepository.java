@@ -17,5 +17,5 @@ public interface PixKeyRegisterRepository extends JpaRepository<PixKeyRegister, 
 
     Optional<PixKeyRegister> findByIdAndKeyInactivationDateIsNull(UUID key);
 
-    Integer countByAgencyNumberAndAccountNumberAndAccountType(Integer agencyNumber, Long accountNumber, String accountType);
+    Integer countByAgencyNumberAndAccountNumber(Integer agencyNumber, Long accountNumber);
 }

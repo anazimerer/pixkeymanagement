@@ -83,8 +83,8 @@ class GeneralValidationStepTest {
         pixKeyContext.getFields().setKeyValue("949.286.190-99");
         pixKeyContext.getFields().setKeyType(PixKeyType.CPF);
 
-        when(pixKeyRegisterRepository.countByAgencyNumberAndAccountNumberAndAccountType(pixKeyContext.getFields().getAgencyNumber(),
-                pixKeyContext.getFields().getAccountNumber(), pixKeyContext.getFields().getAccountType().getValue()))
+        when(pixKeyRegisterRepository.countByAgencyNumberAndAccountNumber(pixKeyContext.getFields().getAgencyNumber(),
+                pixKeyContext.getFields().getAccountNumber()))
                 .thenReturn(6);
 
         Optional<PixKeyContext> context = step.validateAndApplyNext(pixKeyContext);
@@ -94,7 +94,7 @@ class GeneralValidationStepTest {
         assertEquals(1, context.get().getErrorList().size());
         assertEquals(errorMessageDTO.getMessage(), context.get().getErrorList().get(0).getMessage());
         verify(pixKeyRegisterRepository, times(1)).findByKeyValue(anyString());
-        verify(pixKeyRegisterRepository, times(1)).countByAgencyNumberAndAccountNumberAndAccountType(anyInt(), anyLong(), anyString());
+        verify(pixKeyRegisterRepository, times(1)).countByAgencyNumberAndAccountNumber(anyInt(), anyLong());
     }
 
     @Test
@@ -102,8 +102,8 @@ class GeneralValidationStepTest {
         pixKeyContext.getFields().setKeyValue("949.286.190-99");
         pixKeyContext.getFields().setKeyType(CNPJ);
 
-        when(pixKeyRegisterRepository.countByAgencyNumberAndAccountNumberAndAccountType(pixKeyContext.getFields().getAgencyNumber(),
-                pixKeyContext.getFields().getAccountNumber(), pixKeyContext.getFields().getAccountType().getValue()))
+        when(pixKeyRegisterRepository.countByAgencyNumberAndAccountNumber(pixKeyContext.getFields().getAgencyNumber(),
+                pixKeyContext.getFields().getAccountNumber()))
                 .thenReturn(21);
 
         Optional<PixKeyContext> context = step.validateAndApplyNext(pixKeyContext);
@@ -113,7 +113,7 @@ class GeneralValidationStepTest {
         assertEquals(1, context.get().getErrorList().size());
         assertEquals(errorMessageDTO.getMessage(), context.get().getErrorList().get(0).getMessage());
         verify(pixKeyRegisterRepository, times(1)).findByKeyValue(anyString());
-        verify(pixKeyRegisterRepository, times(1)).countByAgencyNumberAndAccountNumberAndAccountType(anyInt(), anyLong(), anyString());
+        verify(pixKeyRegisterRepository, times(1)).countByAgencyNumberAndAccountNumber(anyInt(), anyLong());
     }
 
 

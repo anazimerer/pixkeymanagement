@@ -18,6 +18,7 @@ public class PixKeyContext {
 
     private PixKeyRequestDTO fields;
     private List<ErrorMessageDTO> errorList;
+    private String transactionType;
 
     public PixKeyContext(PixKeyRequestDTO fields) {
         this.fields = fields;
