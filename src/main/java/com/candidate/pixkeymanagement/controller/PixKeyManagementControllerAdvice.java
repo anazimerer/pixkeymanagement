@@ -97,7 +97,7 @@ public class PixKeyManagementControllerAdvice extends ResponseEntityExceptionHan
     @ExceptionHandler(value = NotFoundException.class)
     protected ResponseEntity<Object> handleNotFoundException(NotFoundException ex, WebRequest request) {
         log.debug("NotFoundException", ex);
-        return handleExceptionInternal(ex, null, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+        return handleExceptionInternal(ex, new ErrorMessageDTO(NOT_FOUND_KEY_PIX), new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
     @ExceptionHandler(value = UnexpectedException.class)

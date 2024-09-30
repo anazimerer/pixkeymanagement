@@ -2,13 +2,13 @@ package com.candidate.pixkeymanagement.service;
 
 import com.candidate.pixkeymanagement.dto.PixKeyRequestDTO;
 import com.candidate.pixkeymanagement.dto.PixKeyResponseDTO;
+import com.candidate.pixkeymanagement.exception.UnexpectedException;
 import com.candidate.pixkeymanagement.exception.UnprocessableEntityException;
 import com.candidate.pixkeymanagement.model.PixKeyRegister;
 import com.candidate.pixkeymanagement.repository.PixKeyRegisterRepository;
 import com.candidate.pixkeymanagement.validation.PixKeyContext;
 import com.candidate.pixkeymanagement.validation.orchestrator.ValidationStepEngine;
 import jakarta.transaction.Transactional;
-import jakarta.validation.UnexpectedTypeException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;
@@ -55,7 +55,7 @@ public class RegisterKeyService {
             return pixKeyRegisterRepository.save(pixKeyRegister);
         } catch (Exception e) {
             log.debug("Persistence failed");
-            throw new UnexpectedTypeException("Persistence failed");
+            throw new UnexpectedException("Persistence failed");
         }
 
     }
