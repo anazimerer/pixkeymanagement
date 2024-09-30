@@ -3,10 +3,7 @@ package com.candidate.pixkeymanagement.controller;
 import com.candidate.pixkeymanagement.dto.PixKeyRequestDTO;
 import com.candidate.pixkeymanagement.dto.PixKeyResponseDTO;
 import com.candidate.pixkeymanagement.dto.PixKeyUpdateRequestDTO;
-import com.candidate.pixkeymanagement.service.RegisterKeyService;
-import com.candidate.pixkeymanagement.service.SearchKeyByFilterService;
-import com.candidate.pixkeymanagement.service.SearchKeyByIdService;
-import com.candidate.pixkeymanagement.service.UpdateKeyService;
+import com.candidate.pixkeymanagement.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,6 +22,8 @@ public class PixKeyManagementController {
     private final UpdateKeyService updateKeyService;
     private final SearchKeyByIdService searchKeyByIdService;
     private final SearchKeyByFilterService searchKeyByFilterService;
+    private final DeleteKeyService deleteKeyService;
+
 
     @PostMapping
     private ResponseEntity<PixKeyResponseDTO> createPixKey(@Valid @RequestBody PixKeyRequestDTO pixKeyRequestDTO) {
@@ -54,9 +53,9 @@ public class PixKeyManagementController {
         return ResponseEntity.status(HttpStatus.OK).body(pixKeyResponseDTO);
     }
 
-    @DeleteMapping
-    private void deletePixKey(@RequestBody PixKeyRequestDTO pixKeyRequestDTO) {
-
+    @DeleteMapping("/{id}")
+    private ResponseEntity<PixKeyResponseDTO> deletePixKeyById(@PathVariable UUID id) {
+        PixKeyResponseDTO pixKeyResponseDTO = deleteKeyService.process(id);
+        return ResponseEntity.status(HttpStatus.OK).body(pixKeyResponseDTO);
     }
-
 }
