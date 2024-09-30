@@ -36,7 +36,7 @@ public class PixKeyManagementController {
     }
 
     @PatchMapping
-    private ResponseEntity<PixKeyResponseDTO> updatePixKey(@RequestBody PixKeyUpdateRequestDTO pixKeyUpdateRequestDTO) {
+    private ResponseEntity<PixKeyResponseDTO> updatePixKey(@Valid @RequestBody PixKeyUpdateRequestDTO pixKeyUpdateRequestDTO) {
         log.debug("Started PATCH/ pix key: {}", pixKeyUpdateRequestDTO);
         PixKeyResponseDTO pixKeyResponseDTO = updateKeyService.process(pixKeyUpdateRequestDTO);
 

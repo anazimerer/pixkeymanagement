@@ -42,7 +42,7 @@ public class RegisterKeyService {
         log.debug("Started validation. Pix key type: {}", pixKeyRequestDTO.getKeyType().getValue());
         PixKeyContext context = new PixKeyContext(pixKeyRequestDTO);
         context.setTransactionType("POST");
-        validationStepEngine.validation(context);
+        context = validationStepEngine.validation(context);
 
         if (ObjectUtils.isNotEmpty(context.getErrorList())) {
             log.error("Validation errors: {}", context.getErrorList());

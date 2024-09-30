@@ -20,6 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 import static com.candidate.pixkeymanagement.util.MessageConstant.VALIDATION_FAILED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -60,8 +61,9 @@ class RegisterKeyServiceTest {
 
     @Test
     void shouldThrowExceptionWhenValidationReturnError() {
-        pixKeyContext.getFields().setKeyValue(null);
+        pixKeyContext.getFields().setKeyValue("5511934345454");
         pixKeyContext.setErrorList(List.of(new ErrorMessageDTO(VALIDATION_FAILED)));
+        pixKeyContext.setTransactionType("POST");
 
         when(validationStepEngine.validation(any())).thenReturn(pixKeyContext);
         assertThrows(UnprocessableEntityException.class, () -> registerKeyService.process(pixKeyRequestDTO));
