@@ -49,9 +49,12 @@ class UpdateKeyServiceTest {
 
     @Test
     void shouldUpdateKeySuccessfully() {
+        PixKeyContext context = new PixKeyContext(getPixKeyRequestDTO());
+        context.setTransactionType("PATCH");
+
         when(pixKeyRegisterRepository.findByIdAndKeyInactivationDateIsNull(any(UUID.class)))
                 .thenReturn(Optional.of(pixKeyRegister));
-        when(validationStepEngine.validation(any())).thenReturn(new PixKeyContext(getPixKeyRequestDTO()));
+        when(validationStepEngine.validation(any())).thenReturn(context);
         when(pixKeyRegisterRepository.save(any())).thenReturn(pixKeyRegister);
 
         PixKeyResponseDTO responseDTO = updateKeyService.process(pixKeyUpdateRequestDTO);
@@ -80,6 +83,7 @@ class UpdateKeyServiceTest {
     private PixKeyUpdateRequestDTO getPixKeyUpdateRequestDTO() {
         return PixKeyUpdateRequestDTO.builder()
                 .id(UUID.randomUUID())
+                .accountType(AccountType.CHECKING)
                 .agencyNumber(1234)
                 .accountNumber(56789012345L)
                 .accountHolderFirstName("Lorem Ipsum")

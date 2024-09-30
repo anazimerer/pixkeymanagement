@@ -68,6 +68,7 @@ public class UpdateKeyService {
         try {
             log.debug("Building pixKeyRegister entity to update");
             pixKeyRegister.setKeyRegistrationDate(LocalDateTime.now());
+            pixKeyRegister.setAccountType(pixKeyUpdateRequestDTO.getAccountType().getValue());
             pixKeyRegister.setAgencyNumber(pixKeyUpdateRequestDTO.getAgencyNumber());
             pixKeyRegister.setAccountNumber(pixKeyUpdateRequestDTO.getAccountNumber());
             pixKeyRegister.setAccountHolderFirstName(pixKeyUpdateRequestDTO.getAccountHolderFirstName());

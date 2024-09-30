@@ -41,6 +41,7 @@ class GeneralValidationStepTest {
     @BeforeEach
     void setUp() {
         pixKeyContext = getContextFields();
+        pixKeyContext.setTransactionType("POST");
         pixKeyRegister = getPixKeyRegisterEntity();
     }
 

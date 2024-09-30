@@ -60,8 +60,9 @@ class RegisterKeyServiceTest {
 
     @Test
     void shouldThrowExceptionWhenValidationReturnError() {
-        pixKeyContext.getFields().setKeyValue(null);
+        pixKeyContext.getFields().setKeyValue("5511934345454");
         pixKeyContext.setErrorList(List.of(new ErrorMessageDTO(VALIDATION_FAILED)));
+        pixKeyContext.setTransactionType("POST");
 
         when(validationStepEngine.validation(any())).thenReturn(pixKeyContext);
         assertThrows(UnprocessableEntityException.class, () -> registerKeyService.process(pixKeyRequestDTO));
