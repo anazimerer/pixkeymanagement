@@ -5,12 +5,12 @@ import com.candidate.pixkeymanagement.dto.PixKeyRequestDTO;
 import com.candidate.pixkeymanagement.dto.PixKeyResponseDTO;
 import com.candidate.pixkeymanagement.enumeration.AccountType;
 import com.candidate.pixkeymanagement.enumeration.PixKeyType;
+import com.candidate.pixkeymanagement.exception.UnexpectedException;
 import com.candidate.pixkeymanagement.exception.UnprocessableEntityException;
 import com.candidate.pixkeymanagement.model.PixKeyRegister;
 import com.candidate.pixkeymanagement.repository.PixKeyRegisterRepository;
 import com.candidate.pixkeymanagement.validation.PixKeyContext;
 import com.candidate.pixkeymanagement.validation.orchestrator.ValidationStepEngine;
-import jakarta.validation.UnexpectedTypeException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -72,7 +72,7 @@ class RegisterKeyServiceTest {
     void shouldThrowExceptionWhenPersistFailed() {
         when(validationStepEngine.validation(any())).thenReturn(pixKeyContext);
         when(pixKeyRegisterRepository.save(any(PixKeyRegister.class))).thenThrow(new RuntimeException());
-        assertThrows(UnexpectedTypeException.class, () -> registerKeyService.process(pixKeyRequestDTO));
+        assertThrows(UnexpectedException.class, () -> registerKeyService.process(pixKeyRequestDTO));
 
         verify(pixKeyRegisterRepository, times(1)).save(any(PixKeyRegister.class));
     }

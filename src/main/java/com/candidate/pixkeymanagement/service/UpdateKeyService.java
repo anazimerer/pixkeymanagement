@@ -107,7 +107,7 @@ public class UpdateKeyService {
                     .build();
         } catch (Exception e) {
             log.debug("Convert request to update register failed. Entity id: {}", pixKeyRegister.getId());
-            throw new UnexpectedTypeException(UNEXPECTED_ERROR);
+            throw new UnexpectedTypeException("Update converting failed");
         }
     }
 
@@ -124,11 +124,12 @@ public class UpdateKeyService {
                     .accountHolderFirstName(pixKeyRegisterUpdated.getAccountHolderFirstName())
                     .accountHolderLastName(Objects.nonNull(pixKeyRegisterUpdated.getAccountHolderLastName()) ?
                             pixKeyRegisterUpdated.getAccountHolderLastName() : StringUtils.EMPTY)
+                    .keyRegistrationDate(pixKeyRegisterUpdated.getKeyRegistrationDate())
                     .build();
 
         } catch (Exception e) {
             log.debug("Convert entity to responseDTO failed. Entity id: {}", pixKeyRegisterUpdated.getId());
-            throw new UnexpectedTypeException(UNEXPECTED_ERROR);
+            throw new UnexpectedTypeException("Convert entity to responseDTO failed");
         }
     }
 }
