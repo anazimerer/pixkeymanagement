@@ -17,6 +17,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.candidate.pixkeymanagement.util.MessageConstant.NOT_FOUND_KEY_PIX;
 import static com.candidate.pixkeymanagement.util.MessageConstant.UNEXPECTED_ERROR;
 
 @Slf4j
@@ -41,7 +42,7 @@ public class SearchKeyByIdService {
         Optional<PixKeyRegister> pixKeyRegister = pixKeyRegisterRepository.findByIdAndKeyInactivationDateIsNull(id);
 
         if (pixKeyRegister.isEmpty()) {
-            throw new NotFoundException("Chave não encontrada");
+            throw new NotFoundException(NOT_FOUND_KEY_PIX);
         }
 
         return pixKeyRegister.get();

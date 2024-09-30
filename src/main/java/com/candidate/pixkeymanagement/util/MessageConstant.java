@@ -16,7 +16,7 @@ public abstract class MessageConstant {
     public static final String KEY_ALREADY_REGISTERED = "422.001";
     public static final String VALIDATION_FAILED = "422.002";
     public static final String EXCEEDED_REGISTERS_FOR_TYPE = "422.003";
-    public static final String NOT_UPDATED_RANDOM_KEY = "422.003";
+    public static final String NOT_UPDATED_RANDOM_KEY = "422.004";
 
     public static final String UNEXPECTED_ERROR = "500.001";
 }

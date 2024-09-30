@@ -25,7 +25,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static com.candidate.pixkeymanagement.enumeration.PixKeyType.RANDOM_KEY;
-import static com.candidate.pixkeymanagement.util.MessageConstant.UNEXPECTED_ERROR;
+import static com.candidate.pixkeymanagement.util.MessageConstant.*;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -81,7 +81,7 @@ public class UpdateKeyService {
         Optional<PixKeyRegister> pixKeyRegister = pixKeyRegisterRepository.findByIdAndKeyInactivationDateIsNull(id);
 
         if (pixKeyRegister.isEmpty()) {
-            throw new NotFoundException("Chave inativa ou não encontrada");
+            throw new NotFoundException(NOT_FOUND_KEY_PIX);
         }
 
         return pixKeyRegister.get();
@@ -89,7 +89,7 @@ public class UpdateKeyService {
 
     private void checkIfIsAvailableUpdate(PixKeyRegister pixKeyRegister, PixKeyUpdateRequestDTO pixKeyUpdateRequestDTO) {
         if (RANDOM_KEY.getValue().equals(pixKeyRegister.getKeyType())) {
-            throw new UnexpectedTypeException("Update not process"); //todo alterar
+            throw new UnexpectedTypeException(NOT_UPDATED_RANDOM_KEY);
         }
     }
 
