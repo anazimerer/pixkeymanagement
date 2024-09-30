@@ -2,6 +2,7 @@ package com.candidate.pixkeymanagement.dto;
 
 import com.candidate.pixkeymanagement.enumeration.AccountType;
 import com.candidate.pixkeymanagement.enumeration.PixKeyType;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -45,8 +46,10 @@ public class PixKeyResponseDTO {
     private String accountHolderLastName;
 
     @JsonProperty("dataHoraInclusao")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime keyRegistrationDate;
 
     @JsonProperty("dataHoraInativacao")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime keyInactivationDate;
 }
