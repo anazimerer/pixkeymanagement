@@ -1,7 +1,13 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /pixkeymanagement
+
 spring:
-application:
-  name: Pix Key Management
+  application:
+    name: Pix Key Management
   datasource:
+    url: ${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driverClassName: org.postgresql.Driver
