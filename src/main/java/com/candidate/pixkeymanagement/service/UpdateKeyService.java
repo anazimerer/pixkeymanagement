@@ -40,7 +40,7 @@ public class UpdateKeyService {
         log.debug("Start pix key update. Request: {}", pixKeyUpdateRequestDTO);
 
         PixKeyRegister pixKeyRegister = findActiveRegisterById(pixKeyUpdateRequestDTO.getId());
-        checkIfIsAvailableUpdate(pixKeyRegister, pixKeyUpdateRequestDTO);
+        checkIfIsAvailableUpdate(pixKeyRegister);
         PixKeyRequestDTO pixKeyMergedRequestDTO = mergeEntityAndUpdateRequestDTO(pixKeyUpdateRequestDTO, pixKeyRegister);
         validateValuesToUpdate(pixKeyMergedRequestDTO);
         PixKeyRegister pixKeyRegisterUpdated = persistUpdate(pixKeyUpdateRequestDTO, pixKeyRegister);
@@ -52,15 +52,18 @@ public class UpdateKeyService {
     }
 
     private void validateValuesToUpdate(PixKeyRequestDTO pixKeyMergedRequestDTO) {
+        log.debug("Started validation to update fields. Pix key type: {}", pixKeyMergedRequestDTO.getKeyType().getValue());
         PixKeyContext context = validationStepEngine.validation(new PixKeyContext(pixKeyMergedRequestDTO));
 
         if (ObjectUtils.isNotEmpty(context.getErrorList())) {
+            log.error("Validation errors: {}", context.getErrorList());
             throw new UnprocessableEntityException(context.getErrorList());
         }
     }
 
     private PixKeyRegister persistUpdate(PixKeyUpdateRequestDTO pixKeyUpdateRequestDTO, PixKeyRegister pixKeyRegister) {
         try {
+            log.debug("Building pixKeyRegister entity to update");
             pixKeyRegister.setKeyRegistrationDate(LocalDateTime.now());
             pixKeyRegister.setAgencyNumber(pixKeyUpdateRequestDTO.getAgencyNumber());
             pixKeyRegister.setAccountNumber(pixKeyUpdateRequestDTO.getAccountNumber());
@@ -70,6 +73,7 @@ public class UpdateKeyService {
                 pixKeyRegister.setAccountHolderLastName(pixKeyUpdateRequestDTO.getAccountHolderLastName());
             }
 
+            log.debug("Updating pixKeyRegister in database");
             return pixKeyRegisterRepository.save(pixKeyRegister);
         } catch (Exception e) {
             log.debug("Persistence to update register failed. Entity id: {}", pixKeyRegister.getId());
@@ -78,23 +82,29 @@ public class UpdateKeyService {
     }
 
     private PixKeyRegister findActiveRegisterById(UUID id) {
+        log.debug("Searching for active register by id: {}", id);
         Optional<PixKeyRegister> pixKeyRegister = pixKeyRegisterRepository.findByIdAndKeyInactivationDateIsNull(id);
 
         if (pixKeyRegister.isEmpty()) {
+            log.debug("Not found register by id: {}", id);
             throw new NotFoundException(NOT_FOUND_KEY_PIX);
         }
 
         return pixKeyRegister.get();
     }
 
-    private void checkIfIsAvailableUpdate(PixKeyRegister pixKeyRegister, PixKeyUpdateRequestDTO pixKeyUpdateRequestDTO) {
+    private void checkIfIsAvailableUpdate(PixKeyRegister pixKeyRegister) {
+        log.debug("Checking if keyType is available for updating");
         if (RANDOM_KEY.getValue().equals(pixKeyRegister.getKeyType())) {
+            log.error("KeyType RANDOM_KEY is not available for updating");
             throw new UnexpectedTypeException(NOT_UPDATED_RANDOM_KEY);
         }
     }
 
     private PixKeyRequestDTO mergeEntityAndUpdateRequestDTO(PixKeyUpdateRequestDTO pixKeyUpdateRequestDTO, PixKeyRegister pixKeyRegister) {
         try {
+            log.debug("Merging pixKeyRegister by database and new fields to update by pixKeyUpdateRequestDTO");
+            log.debug("Adapting request to chain of validation");
             return PixKeyRequestDTO.builder()
                     .keyType(PixKeyType.fromValue(pixKeyRegister.getKeyType()).orElseThrow())
                     .keyValue(pixKeyRegister.getKeyValue())
@@ -113,6 +123,7 @@ public class UpdateKeyService {
 
     private PixKeyResponseDTO convertEntityToResponseDTO(PixKeyRegister pixKeyRegisterUpdated) {
         try {
+            log.debug("Converting pixKeyRegister entity to responseDTO");
             return PixKeyResponseDTO.builder()
                     .message("Chave Pix atualizada com sucesso")
                     .id(pixKeyRegisterUpdated.getId())

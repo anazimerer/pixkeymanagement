@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+import static com.candidate.pixkeymanagement.util.MessageConstant.UNEXPECTED_ERROR;
+
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -26,21 +28,29 @@ public class RegisterKeyService {
 
     @Transactional
     public PixKeyResponseDTO process(PixKeyRequestDTO pixKeyRequestDTO) {
+        log.debug("Started pix key register. Request: {}", pixKeyRequestDTO);
+
         validate(pixKeyRequestDTO);
         PixKeyRegister pixKeyRegister = persist(pixKeyRequestDTO);
-        return convertEntityToResponse(pixKeyRegister);
+        PixKeyResponseDTO responseDTO = convertEntityToResponse(pixKeyRegister);
+
+        log.debug("Finished pix key register. Response: {}", responseDTO);
+        return responseDTO;
     }
 
     private void validate(PixKeyRequestDTO pixKeyRequestDTO) {
+        log.debug("Started validation. Pix key type: {}", pixKeyRequestDTO.getKeyType().getValue());
         PixKeyContext context = validationStepEngine.validation(new PixKeyContext(pixKeyRequestDTO));
 
         if (ObjectUtils.isNotEmpty(context.getErrorList())) {
+            log.error("Validation errors: {}", context.getErrorList());
             throw new UnprocessableEntityException(context.getErrorList());
         }
     }
 
     private PixKeyRegister persist(PixKeyRequestDTO pixKeyRequestDTO) {
         try {
+            log.debug("Building pixKeyRegister entity");
             PixKeyRegister pixKeyRegister = PixKeyRegister.builder()
                     .keyType(pixKeyRequestDTO.getKeyType().getValue())
                     .keyValue(pixKeyRequestDTO.getKeyValue())
@@ -52,15 +62,17 @@ public class RegisterKeyService {
                     .keyRegistrationDate(LocalDateTime.now())
                     .build();
 
+            log.debug("Saving pixKeyRegister entity");
             return pixKeyRegisterRepository.save(pixKeyRegister);
         } catch (Exception e) {
-            log.debug("Persistence failed");
-            throw new UnexpectedException("Persistence failed");
+            log.error("Persistence pixKeyRegister entity failed");
+            throw new UnexpectedException(UNEXPECTED_ERROR);
         }
 
     }
 
     private PixKeyResponseDTO convertEntityToResponse(PixKeyRegister pixKeyRegister) {
+        log.debug("Converting pixKeyRegister entity to responseDTO");
         return PixKeyResponseDTO.builder().message("Chave Pix cadastrada com sucesso").id(pixKeyRegister.getId()).build();
     }
 }
