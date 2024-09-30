@@ -5,10 +5,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class PixkeymanagementApplication {
+public class PixKeyManagementApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(PixkeymanagementApplication.class, args);
+		SpringApplication.run(PixKeyManagementApplication.class, args);
 	}
 
 }
