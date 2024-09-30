@@ -20,7 +20,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 import static com.candidate.pixkeymanagement.util.MessageConstant.VALIDATION_FAILED;
 import static org.junit.jupiter.api.Assertions.assertEquals;
