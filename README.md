@@ -4,7 +4,7 @@ Este projeto implementa um sistema de cadastro de chaves Pix com validação dos
 
 ## Tecnologias Utilizadas
 
-- **Java 17 (Corretto)**
+- **Java 17 **
 - **Spring Boot**
 - **PostgreSQL** (rodando em container Docker)
 - **Docker**
