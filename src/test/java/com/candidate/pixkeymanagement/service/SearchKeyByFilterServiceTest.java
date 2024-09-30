@@ -57,11 +57,7 @@ class SearchKeyByFilterServiceTest {
 
     @Test
     void shouldProcessGetSuccessfully() {
-        List<PixKeyRegister> pixKeyRegisters = new ArrayList<>();
-        ;
-        pixKeyRegisters.add(pixKeyRegister);
-        when(pixKeyRegisterRepository.findAll(any(Specification.class))).thenReturn(pixKeyRegisters);
-
+        when(pixKeyRegisterRepository.findAll(any(Specification.class))).thenReturn(List.of(pixKeyRegister));
         assertDoesNotThrow(() -> searchKeyByFilterService.process("EMAIL", null, null, null));
     }
 
