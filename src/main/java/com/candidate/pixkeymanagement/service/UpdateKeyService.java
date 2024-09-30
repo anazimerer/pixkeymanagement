@@ -53,7 +53,10 @@ public class UpdateKeyService {
 
     private void validateValuesToUpdate(PixKeyRequestDTO pixKeyMergedRequestDTO) {
         log.debug("Started validation to update fields. Pix key type: {}", pixKeyMergedRequestDTO.getKeyType().getValue());
-        PixKeyContext context = validationStepEngine.validation(new PixKeyContext(pixKeyMergedRequestDTO));
+
+        PixKeyContext context = new PixKeyContext(pixKeyMergedRequestDTO);
+        context.setTransactionType("PATCH");
+        validationStepEngine.validation(context);
 
         if (ObjectUtils.isNotEmpty(context.getErrorList())) {
             log.error("Validation errors: {}", context.getErrorList());

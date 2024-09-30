@@ -31,23 +31,23 @@ public class GeneralValidationStep extends AbstractValidationStep {
 
     @Override
     protected Optional<PixKeyContext> validateAndApplyNext(PixKeyContext context) {
-        boolean isValid = validate(context);
-        if (!isValid) {
-            log.debug("Key cellphone Validation failed. Error list: {}", context.getErrorList());
-        }
-
+        validate(context);
         return Optional.of(context);
     }
 
-    private boolean validate(PixKeyContext context) {
+    private void validate(PixKeyContext context) {
         List<ErrorMessageDTO> errorList = context.getErrorList();
         String key = context.getFields().getKeyValue();
 
         if (!checkIfKeyIsNonNull(key, errorList)) {
-            return false;
+            return;
         }
 
-        return hasAlreadyRegistered(key, errorList) && hasMoreThanFiveOrTwentyKeysRegisters(context.getFields(), errorList);
+        if (Objects.equals("POST", context.getTransactionType())) {
+            hasAlreadyRegistered(key, errorList);
+        }
+
+        hasMoreThanFiveOrTwentyKeysRegisters(context.getFields(), errorList);
     }
 
     private boolean checkIfKeyIsNonNull(String key, List<ErrorMessageDTO> errorList) {
@@ -69,8 +69,8 @@ public class GeneralValidationStep extends AbstractValidationStep {
     }
 
     private boolean hasMoreThanFiveOrTwentyKeysRegisters(PixKeyRequestDTO pixKeyRequestDTO, List<ErrorMessageDTO> errorList) {
-        Integer countRegisters = pixKeyRegisterRepository.countByAgencyNumberAndAccountNumberAndAccountType(pixKeyRequestDTO.getAgencyNumber(),
-                pixKeyRequestDTO.getAccountNumber(), pixKeyRequestDTO.getAccountType().getValue());
+        Integer countRegisters = pixKeyRegisterRepository.countByAgencyNumberAndAccountNumber(pixKeyRequestDTO.getAgencyNumber(),
+                pixKeyRequestDTO.getAccountNumber());
 
         if (PixKeyType.CPF.equals(pixKeyRequestDTO.getKeyType()) && countRegisters > 5) {
             errorList.add(new ErrorMessageDTO(EXCEEDED_REGISTERS_FOR_TYPE, CPF.getValue()));
